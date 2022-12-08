@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Central_API.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<Central_APIContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Central_APIContext") ?? throw new InvalidOperationException("Connection string 'Central_APIContext' not found.")));
 
 // Add services to the container.
 
