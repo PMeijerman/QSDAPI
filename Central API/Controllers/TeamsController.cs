@@ -10,7 +10,7 @@ using Central_API.Models;
 
 namespace Central_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class TeamsController : ControllerBase
     {

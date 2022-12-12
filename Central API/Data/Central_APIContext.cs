@@ -15,5 +15,7 @@ namespace Central_API.Data
         }
 
         public DbSet<Central_API.Models.Team> Team { get; set; } = default!;
+
+        public DbSet<Central_API.Models.LocationData> LocationData { get; set; }
     }
 }
