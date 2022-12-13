@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Central_API.Data;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Central_APIContext>(options =>
@@ -18,6 +19,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(); // Make sure you call this previous to AddMvc
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +29,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(builder => builder
+  .AllowAnyOrigin()
+  .AllowAnyMethod()
+  .AllowAnyHeader());
 
 app.UseHttpsRedirection();
 
