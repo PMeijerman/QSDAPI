@@ -2,103 +2,95 @@ namespace Central_API.Models;
 
 public class Kart
 {
-    public double Longitude { get; set; }
-    public double Latitude { get; set; }
-    
+	public double Longitude { get; set; }
+	public double Latitude { get; set; }
+	public double CenterlineLongitude { get; set; }
+	public double CenterlineLatitude { get; set; }
+	public List<int> PassedPoints { get; set; }
+	public Track Track { get; set; }
 
-    void Init()
-    {
-        // Initialization code goes here
-    }
 
-    Dictionary<string, double> GetKartCoordinates()
-    {
-        // Code for making an AJAX call goes here
-        // For example:
-        /*
-        var client = new HttpClient();
-        var response = await client.GetAsync("https://selecting-thought-rim-counter.trycloudflare.com/mostRecent%22);
-        var jsonString = await response.Content.ReadAsStringAsync();
-        var data = JsonConvert.DeserializeObject<Dictionary<string, double>>(jsonString);
-        return data;
-        */
-    }
+	void Init()
+	{
+		// Initialization code goes here
+	}
 
-    public Dictionary<string, object> GetPassedPoint(double kartX, double kartY, List<List<double>> mapData)
-    {
-        int closestIndex = (int)_configMap["kartPassedPoints"].Count();
-        double closestLength = 10000;
+	public TrackDistance GetPassedPoint()
+	{
+		int closestIndex = PassedPoints.Count();
+		int closestLength = 10000;
 
-        double x, y;
+		double x, y;
 
-        if (closestIndex != mapData.Count())
-        {
-            x = mapData[closestIndex][0];
-            y = mapData[closestIndex][];
-        }
-    }
-    
-    public bool pointPassed(HartlineCoordinates hartlineCoordinates, MapData mapData)
-    {
-        var nearestPoint = getPassedPoint(hartlineCoordinates.x, hartlineCoordinates.y, mapData);
+		if (closestIndex != mapData.Count())
+		{
+			x = mapData[closestIndex][0];
+			y = mapData[closestIndex][1];
+		}
+		return new TrackDistance() { ClosestIndex = closestIndex, MetersToNextPoint = closestLength };
+	}
 
-        if (nearestPoint.length < 0.001)
-        {
-            if (!_configMap.kartPassedPoints.Contains(nearestPoint.index))
-            {
-                _configMap.kartPassedPoints.Add(nearestPoint.index);
-                return true;
-            }
-        }
+	public bool pointPassed()
+	{
+		TrackDistance nearestPoint = GetPassedPoint(CenterlineLatitude, CenterlineLongitude, mapData);
 
-        return false;
-    }
-    
-    public TrackDistance calculateTrackDistance(NearestPoint nearestPoint, double[][] mapData)
-    {
-        double prevX = 0, prevY = 0, meters = 0;
+		if (nearestPoint.MetersToNextPoint < 0.001)
+		{
+			if (!PassedPoints.Contains(nearestPoint.ClosestIndex))
+			{
+				PassedPoints.Add(nearestPoint.ClosestIndex);
+				return true;
+			}
+		}
 
-        for (int index = 0; index <= nearestPoint.index; index++)
-        {
-            double x = mapData[index][0];
-            double y = mapData[index][1];
+		return false;
+	}
 
-            if (prevX != 0)
-            {
-                meters += Distance.getDistanceFromLatLonInKm(y, x, prevY, prevX) * 1000;
-            }
+	public TrackDistance calculateTrackDistance(TrackDistance nearestPoint)
+	{
+		double prevX = 0, prevY = 0, meters = 0;
 
-            prevX = x;
-            prevY = y;
-        }
+		for (int index = 0; index <= nearestPoint.ClosestIndex; index++)
+		{
+			double x = mapData[index][0];
+			double y = mapData[index][1];
 
-        double[] pointTo = mapData[nearestPoint.index];
-        double[] pointFrom = mapData[nearestPoint.index - 1];
+			if (prevX != 0)
+			{
+				meters += Track.getDistanceFromLatLonInKm(y, x, prevY, prevX) * 1000;
+			}
 
-        if (nearestPoint.index == 0)
-        {
-            pointFrom = mapData[mapData.Length - 1];
-        }
+			prevX = x;
+			prevY = y;
+		}
 
-        double distanceBetween = Distance.getDistanceFromLatLonInKm(pointTo[1], pointTo[0], pointFrom[1], pointFrom[0]) * 1000;
+		double[] pointTo = mapData[nearestPoint.ClosestIndex];
+		double[] pointFrom = mapData[nearestPoint.ClosestIndex - 1];
 
-        double percentage = distanceBetween / meters;
+		if (nearestPoint.ClosestIndex == 0)
+		{
+			pointFrom = mapData[mapData.Length - 1];
+		}
 
-        if (!_configMap.kartPassedPoints.Contains(nearestPoint.index))
-        {
-            meters -= nearestPoint.length * 1000;
-        }
-        else
-        {
-            meters += nearestPoint.length * 1000;
-        }
+		double distanceBetween = Track.getDistanceFromLatLonInKm(pointTo[1], pointTo[0], pointFrom[1], pointFrom[0]) * 1000;
 
-        return new TrackDistance
-        {
-            metersTraveled = meters,
-            pointTo = pointTo,
-            pointFrom = pointFrom,
-            percentageBetweenPoints = percentage
-        };
-    }
+		double percentage = distanceBetween / meters;
+
+		if (!_configMap.kartPassedPoints.Contains(nearestPoint))
+		{
+			meters -= nearestPoint.MetersToNextPoint * 1000;
+		}
+		else
+		{
+			meters += nearestPoint.MetersToNextPoint * 1000;
+		}
+
+		return new TrackDistance
+		{
+			MetersToNextPoint = meters,
+			pointTo = pointTo,
+			pointFrom = pointFrom,
+			percentageBetweenPoints = percentage
+		};
+	}
 }

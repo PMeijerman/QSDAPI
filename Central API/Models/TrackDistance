@@ -1,0 +1,15 @@
+namespace Central_API.Models
+{
+	public class TrackDistance
+	{
+		public int ClosestIndex { get; set; }
+
+		public int MetersToNextPoint { get; set; }
+
+		public int pointTo { get; set; }
+
+		public int pointFrom { get; set; }
+
+		public double percentageBetweenPoints { get; set; }
+	}
+}
