@@ -6,10 +6,10 @@ namespace Central_API.Models
 
 		public double MetersToNextPoint { get; set; }
 
-		public double[] pointTo { get; set; }
+		public double[] PointTo { get; set; }
 
-		public double[] pointFrom { get; set; }
+		public double[] PointFrom { get; set; }
 
-		public double percentageBetweenPoints { get; set; }
+		public double PercentageBetweenPoints { get; set; }
 	}
 }

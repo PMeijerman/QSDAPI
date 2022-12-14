@@ -95,9 +95,9 @@ public class Kart
 		return new TrackDistance
 		{
 			MetersToNextPoint = meters,
-			pointTo = pointTo,
-			pointFrom = pointFrom,
-			percentageBetweenPoints = percentage
+			PointTo = pointTo,
+			PointFrom = pointFrom,
+			PercentageBetweenPoints = percentage
 		};
 	}
 }
