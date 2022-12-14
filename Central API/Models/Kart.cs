@@ -22,17 +22,19 @@ public class Kart
 	public TrackDistance GetPassedPoint()
 	{
 		int closestIndex = PassedPoints.Count();
-		int closestLength = 10000;
+		double closestLength = 10000;
 
-		double x, y;
+		double x = 0, y = 0;
 
 		if (closestIndex != StaticMap.MapPoints.Count())
 		{
 			x = StaticMap.MapPoints[closestIndex][0];
 			y = StaticMap.MapPoints[closestIndex][1];
 		}
-		
-		return new TrackDistance() { ClosestIndex = closestIndex, MetersToNextPoint = closestLength };
+
+        closestLength = Track.getDistanceFromLatLonInKm(y, x, Latitude, Longitude);
+
+        return new TrackDistance() { ClosestIndex = closestIndex, MetersToNextPoint = closestLength };
 	}
 
 	public bool pointPassed()
