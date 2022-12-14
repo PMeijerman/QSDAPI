@@ -4,11 +4,11 @@ namespace Central_API.Models
 	{
 		public int ClosestIndex { get; set; }
 
-		public int MetersToNextPoint { get; set; }
+		public double MetersToNextPoint { get; set; }
 
-		public int pointTo { get; set; }
+		public double[] pointTo { get; set; }
 
-		public int pointFrom { get; set; }
+		public double[] pointFrom { get; set; }
 
 		public double percentageBetweenPoints { get; set; }
 	}

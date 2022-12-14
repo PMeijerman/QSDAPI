@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Central_API.Models;
 
 public class Kart
@@ -9,10 +11,12 @@ public class Kart
 	public List<int> PassedPoints { get; set; }
 	public Track Track { get; set; }
 
-
 	void Init()
 	{
 		// Initialization code goes here
+		if(StaticMap.MapPoints == null) {
+			StaticMap.MapPoints = StaticMap.ReadFromJsonFile();
+		}
 	}
 
 	public TrackDistance GetPassedPoint()
@@ -22,19 +26,20 @@ public class Kart
 
 		double x, y;
 
-		if (closestIndex != mapData.Count())
+		if (closestIndex != StaticMap.MapPoints.Count())
 		{
-			x = mapData[closestIndex][0];
-			y = mapData[closestIndex][1];
+			x = StaticMap.MapPoints[closestIndex][0];
+			y = StaticMap.MapPoints[closestIndex][1];
 		}
+		
 		return new TrackDistance() { ClosestIndex = closestIndex, MetersToNextPoint = closestLength };
 	}
 
 	public bool pointPassed()
 	{
-		TrackDistance nearestPoint = GetPassedPoint(CenterlineLatitude, CenterlineLongitude, mapData);
+		TrackDistance nearestPoint = GetPassedPoint();
 
-		if (nearestPoint.MetersToNextPoint < 0.001)
+		if (nearestPoint.MetersToNextPoint < 0.003)
 		{
 			if (!PassedPoints.Contains(nearestPoint.ClosestIndex))
 			{
@@ -52,8 +57,8 @@ public class Kart
 
 		for (int index = 0; index <= nearestPoint.ClosestIndex; index++)
 		{
-			double x = mapData[index][0];
-			double y = mapData[index][1];
+			double x = StaticMap.MapPoints[index][0];
+			double y = StaticMap.MapPoints[index][1];
 
 			if (prevX != 0)
 			{
@@ -64,19 +69,19 @@ public class Kart
 			prevY = y;
 		}
 
-		double[] pointTo = mapData[nearestPoint.ClosestIndex];
-		double[] pointFrom = mapData[nearestPoint.ClosestIndex - 1];
+		double[] pointTo = StaticMap.MapPoints[nearestPoint.ClosestIndex];
+		double[] pointFrom = StaticMap.MapPoints[nearestPoint.ClosestIndex - 1];
 
 		if (nearestPoint.ClosestIndex == 0)
 		{
-			pointFrom = mapData[mapData.Length - 1];
+			pointFrom = StaticMap.MapPoints[StaticMap.MapPoints.Length - 1];
 		}
 
 		double distanceBetween = Track.getDistanceFromLatLonInKm(pointTo[1], pointTo[0], pointFrom[1], pointFrom[0]) * 1000;
 
 		double percentage = distanceBetween / meters;
 
-		if (!_configMap.kartPassedPoints.Contains(nearestPoint))
+		if (!PassedPoints.Contains(nearestPoint.ClosestIndex))
 		{
 			meters -= nearestPoint.MetersToNextPoint * 1000;
 		}
