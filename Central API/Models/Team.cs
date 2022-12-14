@@ -11,6 +11,7 @@ namespace Central_API.Models
         public long TotalTime { get; set; }
         public float TotalDistance { get; set; }
         public float Score { get; set; }
+        public string University { get; set; }
 
         public ICollection<Lap>? Laps { get; set; }
         public ICollection<LocationData>? LocationData { get; set; }
