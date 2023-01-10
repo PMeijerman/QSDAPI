@@ -12,7 +12,7 @@ namespace Central_API.Models
 		public long TotalTime { get; set; }
 		public float TotalDistance { get; set; }
 		public float Score { get; set; }
-		public List<int> PassedPoints { get; set; }
+		public List<PassedPoint> PassedPoints { get; set; }
 		public ICollection<Lap>? Laps { get; set; }
 
 		public Team()
