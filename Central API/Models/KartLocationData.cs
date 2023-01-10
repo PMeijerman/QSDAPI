@@ -12,6 +12,7 @@ public class KartLocationData
 	public double DistanceTraveled { get; set; }
 	public int TeamId { get; set; }
 	public Team Team { get; set; }
+	public DateTime CreatedAt { get; internal set; }
 
 	public KartLocationData()
 	{

@@ -28,13 +28,13 @@ namespace Central_API.Controllers
 			return await _context.LocationData/*.Include(l => l.Team)*/.ToListAsync();
 		}
 
-		// GET: /MostRecent
+		/*// GET: /MostRecent
 		[HttpGet("/mostRecent")]
 		public async Task<ActionResult<LocationData>> GetMostRecent()
 		{
 			var list = await _context.LocationData.ToListAsync();
 			return list.OrderByDescending(x => x.CreatedAt).FirstOrDefault();
-		}
+		}*/
 
 
 		// GET: api/LocationDatas/5
@@ -51,9 +51,17 @@ namespace Central_API.Controllers
 			return locationData;
 		}
 
-		// PUT: api/LocationDatas/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPut("{id}")]
+        [HttpGet("/mostRecent/{teamId}")]
+        public async Task<ActionResult<LocationData>> GetMostRecent(int teamId)
+        {
+            var list = await _context.KartLocationData.Where(l => l.TeamId == teamId).ToListAsync();
+            return Ok(list.OrderByDescending(x => x.CreatedAt).FirstOrDefault());
+        }
+
+
+        // PUT: api/LocationDatas/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
 		public async Task<IActionResult> PutLocationData(int id, LocationData locationData)
 		{
 			if (id != locationData.Id)
@@ -91,11 +99,12 @@ namespace Central_API.Controllers
 			locationData.CreatedAt = DateTime.Now;
 			Team team = _context.Team.FirstOrDefault(x => x.Id == locationData.TeamId);
 
-            KartLocationData kartLocationData = new KartLocationData()
+			KartLocationData kartLocationData = new KartLocationData()
 			{
 				KartLatitude = locationData.Latitude,
 				KartLongitude = locationData.Longitude,
 				Team = team,
+				CreatedAt = DateTime.Now
 			};
 
 			while (true)
