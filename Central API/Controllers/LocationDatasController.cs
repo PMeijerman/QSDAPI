@@ -111,7 +111,7 @@ namespace Central_API.Controllers
 			return locationData;
 		}
 
-		public KartDistanceTrack UpdateKartHartlinePosition(KartLocationData kartLocationData)
+		private KartDistanceTrack UpdateKartHartlinePosition(KartLocationData kartLocationData)
 		{
 			KartDistanceTrack nearestPoint = kartLocationData.GetPassedPoint();
 

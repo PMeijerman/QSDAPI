@@ -4,6 +4,7 @@ namespace Central_API.Models;
 
 public class KartLocationData
 {
+	public int Id { get; set; }
 	public double KartLongitude { get; set; }
 	public double KartLatitude { get; set; }
 	public double CenterlineLongitude { get; set; }
@@ -54,7 +55,7 @@ public class KartLocationData
 		}
 		else
 		{
-			Team.PassedPoints = new List<int>();
+			Team.PassedPoints = new List<PassedPoint>();
 			closestIndex = 0;
 
 			longitude = StaticMap.MapPoints[0][0];
@@ -72,9 +73,9 @@ public class KartLocationData
 
 		if (nearestPoint.MetersToNextPoint < 0.003)
 		{
-			if (!Team.PassedPoints.Contains(nearestPoint.ClosestIndex))
+			if (!Team.PassedPoints.Contains(new PassedPoint() { Point = nearestPoint.ClosestIndex }))
 			{
-				Team.PassedPoints.Add(nearestPoint.ClosestIndex);
+				Team.PassedPoints.Add(new PassedPoint() { Point = nearestPoint.ClosestIndex });
 				return true;
 			}
 		}
@@ -128,7 +129,7 @@ public class KartLocationData
 			percentage = 0;
 		}
 
-		if (!Team.PassedPoints.Contains(nearestPoint.ClosestIndex))
+		if (!Team.PassedPoints.Contains(new PassedPoint() { Point = nearestPoint.ClosestIndex }))
 		{
 			meters -= nearestPoint.MetersToNextPoint * 1000;
 		}
