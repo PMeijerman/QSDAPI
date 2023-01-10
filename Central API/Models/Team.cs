@@ -8,12 +8,12 @@ namespace Central_API.Models
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public Color Color { get; set; }
+		public List<KartLocationData> KartLocationDatas { get; set; }
 		public long TotalTime { get; set; }
 		public float TotalDistance { get; set; }
 		public float Score { get; set; }
-
+		public List<int> PassedPoints { get; set; }
 		public ICollection<Lap>? Laps { get; set; }
-		public ICollection<LocationData>? LocationData { get; set; }
 
 		public Team()
 		{
