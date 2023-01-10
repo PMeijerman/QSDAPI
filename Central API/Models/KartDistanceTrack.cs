@@ -11,5 +11,6 @@ namespace Central_API.Models
 		public MapPoint PointFrom { get; set; }
 
 		public double PercentageBetweenPoints { get; set; }
+
 	}
 }

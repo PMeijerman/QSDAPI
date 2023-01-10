@@ -11,10 +11,7 @@ namespace Central_API.Models
         public float Latitude { get; set; }
         public float Longitude { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        [ForeignKey("TeamId")]
         public int TeamId { get; set; }
-        public Team? Team { get; set; }
 
         public LocationData(int teamId, float latitude, float longitude)
         {

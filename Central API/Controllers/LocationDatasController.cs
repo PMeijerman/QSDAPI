@@ -89,18 +89,18 @@ namespace Central_API.Controllers
 		{
 			//TODO calculate distance
 			locationData.CreatedAt = DateTime.Now;
-			_context.Add(locationData);
+			Team team = _context.Team.FirstOrDefault(x => x.Id == locationData.TeamId);
 
-			KartLocationData kartLocationData = new KartLocationData()
+            KartLocationData kartLocationData = new KartLocationData()
 			{
 				KartLatitude = locationData.Latitude,
 				KartLongitude = locationData.Longitude,
-				Team = locationData.Team,
+				Team = team,
 			};
 
 			while (true)
 			{
-				KartDistanceTrack updatedHartlinePosition = UpdateKartHartlinePosition(kartLocationData);
+				KartDistanceTrack updatedHartlinePosition = UpdateKartHartlinePosition(ref kartLocationData);
 
 				if (updatedHartlinePosition.PercentageBetweenPoints != 1) break;
 			}
@@ -111,7 +111,7 @@ namespace Central_API.Controllers
 			return locationData;
 		}
 
-		private KartDistanceTrack UpdateKartHartlinePosition(KartLocationData kartLocationData)
+		private KartDistanceTrack UpdateKartHartlinePosition(ref KartLocationData kartLocationData)
 		{
 			KartDistanceTrack nearestPoint = kartLocationData.GetPassedPoint();
 
@@ -130,8 +130,8 @@ namespace Central_API.Controllers
 
 			kartLocationData.CenterlineLongitude = centerlineCoordinates.Longitude;
 			kartLocationData.CenterlineLatitude = centerlineCoordinates.Latitude;
-
-			return trackDistance;
+            
+            return trackDistance;
 		}
 
 

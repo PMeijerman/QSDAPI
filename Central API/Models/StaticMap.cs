@@ -8,7 +8,7 @@ public static class StaticMap
     public static double[][] ReadFromJsonFile()
     {
         double[][] result;
-        using (StreamReader reader = new StreamReader("./Content/trackpointsTestSchool.json"))
+        using (StreamReader reader = new StreamReader("./Content/trackpoints.json"))
         {
             string json = reader.ReadToEnd();
             result = JsonConvert.DeserializeObject<double[][]>(json);
